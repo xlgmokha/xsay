@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
 require "xsay"
+
+Xsay::CLI.start(ARGV)
