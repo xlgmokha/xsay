@@ -3,11 +3,20 @@ require "thor"
 
 module Xsay
   class CLI < Thor
-    Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))].each do |filename|
+    ANIMALS=Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))]
+
+    ANIMALS.each do |filename|
       animal = File.basename(filename).split(".")[0]
 
       desc "#{animal} <message>", "xsay #{animal} hello"
       define_method animal do |message|
+        render(message, IO.read(filename))
+      end
+    end
+
+    desc "all <message>", "xsay all hello"
+    def all(message)
+      ANIMALS.each do |filename|
         render(message, IO.read(filename))
       end
     end
