@@ -3,16 +3,13 @@ require "thor"
 
 module Xsay
   class CLI < Thor
-    desc "cat <message>", "xsay cat meow"
-    def cat(message)
-      template = IO.read(File.expand_path("xsay/templates/cat.template", File.dirname(__FILE__)))
-      render(message, template)
-    end
+    Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))].each do |filename|
+      animal = File.basename(filename).split(".")[0]
 
-    desc "hippo <message>", "xsay hippo meow"
-    def hippo(message)
-      template = IO.read(File.expand_path('xsay/templates/hippo.template', File.dirname(__FILE__)))
-      render(message, template)
+      desc "#{animal} <message>", "xsay #{animal} hello"
+      define_method animal do |message|
+        render(message, IO.read(filename))
+      end
     end
 
     private
