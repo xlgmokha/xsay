@@ -17,26 +17,7 @@ module Xsay
 
     desc "hippo <message>", "xsay hippo meow"
     def hippo(message)
-      template = <<-MESSAGE
-  .-''''-. _
- ('    '  '0)-/)
- '..____..:    \\._
-   \\u  u (        '-..------._
-   |     /      :   '.        '--.
-  .nn_nn/ (      :   '            '\\
- ( '' '' /      ;     .             \\
-  ''----' "\\          :            : '.
-         .'/                           '.
-        / /                             '.
-       /_|       )                     .\\|
-         |      /\\                     . '
-         '--.__|  '--._  ,            /
-                      /'-,          .'
-                     /   |        _.'
-                    (____\\       /
-                          \\      \\
-                           '-'-'-'
-      MESSAGE
+      template = IO.read(File.expand_path('xsay/templates/hippo.template', File.dirname(__FILE__)))
       render(message, template)
     end
 
