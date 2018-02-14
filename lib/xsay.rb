@@ -5,13 +5,7 @@ module Xsay
   class CLI < Thor
     desc "cat <message>", "xsay cat meow"
     def cat(message)
-      template = <<-MESSAGE
-    ("`-''-/").___..--''"`-._
-     `6_ 6  )   `-.  (     ).`-.__.`)
-     (_Y_.)'  ._   )  `._ `. ``-..-'
-   _..`--'_..-_/  /--'_.' ,'
-  (il),-''  (li),'  ((!.-'
-      MESSAGE
+      template = IO.read(File.expand_path("xsay/templates/cat.template", File.dirname(__FILE__)))
       render(message, template)
     end
 
