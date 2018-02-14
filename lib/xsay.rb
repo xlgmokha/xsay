@@ -21,12 +21,7 @@ module Xsay
 
     desc "hippo <message>", "xsay hippo meow"
     def hippo(message)
-      line_break = "-" * message.length
-      say <<-MESSAGE
-  #{line_break}
-< #{message} >
-  #{line_break}
-
+      template = <<-MESSAGE
   .-''''-. _
  ('    '  '0)-/)
  '..____..:    \\._
@@ -46,11 +41,20 @@ module Xsay
                           \\      \\
                            '-'-'-'
       MESSAGE
+      render(message, template)
     end
 
     private
 
     def render(message, template)
+      line_break = "-" * message.length
+      say <<-MESSAGE
+  #{line_break}
+< #{message} >
+  #{line_break}
+
+#{template}
+      MESSAGE
     end
   end
 end
