@@ -21,6 +21,11 @@ module Xsay
       end
     end
 
+    desc "random <message>", "xsay random hello"
+    def random(message)
+      render(message, IO.read(ANIMALS.shuffle.sample))
+    end
+
     private
 
     def render(message, template)
