@@ -9,26 +9,27 @@ module Xsay
       animal = File.basename(filename).split(".")[0]
 
       desc "#{animal} <message>", "xsay #{animal} hello"
-      define_method animal do |message|
-        render(message, IO.read(filename))
+      define_method animal do |*args|
+        render(args, IO.read(filename))
       end
     end
 
     desc "all <message>", "xsay all hello"
-    def all(message)
+    def all(*args)
       ANIMALS.each do |filename|
-        render(message, IO.read(filename))
+        render(args, IO.read(filename))
       end
     end
 
     desc "random <message>", "xsay random hello"
-    def random(message)
-      render(message, IO.read(ANIMALS.shuffle.sample))
+    def random(*args)
+      render(args, IO.read(ANIMALS.shuffle.sample))
     end
 
     private
 
     def render(message, template)
+      message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
       say <<-MESSAGE
   #{line_break}
