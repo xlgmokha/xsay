@@ -18,9 +18,9 @@ module Xsay
 
     desc "all <message>", "xsay all hello"
     def all(*args)
-      ANIMALS.each do |filename|
-        render(args, IO.read(filename))
-      end
+      animals = public_methods - Thor.new.methods - [:random, :all]
+      animals.each { |x| public_send(x, *args) }
+      nil
     end
 
     desc "random <message>", "xsay random hello"
@@ -46,8 +46,9 @@ module Xsay
           print x.colorize(String.colors[i % String.colors.size])
         end
       else
-        puts result.colorize(colour)
+        say result.colorize(colour)
       end
+      nil
     end
   end
 end
