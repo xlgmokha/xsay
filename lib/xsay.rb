@@ -5,6 +5,7 @@ require "colorize"
 module Xsay
   class CLI < Thor
     ANIMALS=Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))]
+    class_option :colour, default: :default, required: false
 
     ANIMALS.each do |filename|
       animal = File.basename(filename).split(".")[0]
@@ -24,17 +25,13 @@ module Xsay
 
     desc "random <message>", "xsay random hello"
     def random(*args)
-      render(args, IO.read(ANIMALS.shuffle.sample), colour: String.colors.sample)
-    end
-
-    desc "rainbow <message>", "xsay rainbow hello world"
-    def rainbow(*args)
-      render(args, IO.read(ANIMALS.shuffle.sample), colour: :rainbow)
+      random_color = (String.colors + [:rainbow]).sample
+      render(args, IO.read(ANIMALS.shuffle.sample), colour: random_color)
     end
 
     private
 
-    def render(message, template, colour: :default)
+    def render(message, template, colour: options[:colour].to_sym)
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
       result = <<-MESSAGE
