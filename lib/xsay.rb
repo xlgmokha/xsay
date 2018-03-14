@@ -26,8 +26,8 @@ module Xsay
 
     desc "random <message>", "xsay random hello"
     def random(*args)
-      random_color = (String.colors + [:rainbow]).sample
-      render(args, IO.read(ANIMALS.shuffle.sample), colour: random_color)
+      random_colour = (String.colors + [:rainbow]).sample
+      render(args, IO.read(ANIMALS.shuffle.sample), colour: random_colour)
     end
 
     private
