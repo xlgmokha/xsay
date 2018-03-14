@@ -7,6 +7,7 @@ module Xsay
     ANIMALS=Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))]
     class_option :colour, default: :default, required: false
     class_option :distance, default: 1, required: false, type: :numeric
+    class_option :speed, default: 1, required: false, type: :numeric
 
     ANIMALS.each do |filename|
       animal = File.basename(filename).split(".")[0]
@@ -32,7 +33,13 @@ module Xsay
 
     private
 
-    def render(message, template, colour: options[:colour].to_sym, distance: options[:distance])
+    def render(
+      message,
+      template,
+      colour: options[:colour].to_sym,
+      distance: options[:distance],
+      speed: options[:speed]
+    )
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
       move = distance > 1
@@ -53,7 +60,7 @@ module Xsay
         else
           say result.colorize(colour)
         end
-        sleep 1 if move
+        sleep speed if move
       end
       nil
     end
