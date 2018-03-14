@@ -2,4 +2,9 @@
 
 require "xsay"
 
+trap :SIGINT do
+  puts "Good bye!"
+  exit 0
+end
+
 Xsay::CLI.start(ARGV)
