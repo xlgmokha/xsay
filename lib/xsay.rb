@@ -6,6 +6,7 @@ module Xsay
   class CLI < Thor
     ANIMALS=Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))]
     class_option :colour, default: :default, required: false
+    class_option :distance, default: 1, required: false, type: :numeric
 
     ANIMALS.each do |filename|
       animal = File.basename(filename).split(".")[0]
@@ -31,22 +32,28 @@ module Xsay
 
     private
 
-    def render(message, template, colour: options[:colour].to_sym)
+    def render(message, template, colour: options[:colour].to_sym, distance: options[:distance])
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
-      result = <<-MESSAGE
+      move = distance > 1
+      distance.times do |n|
+        system 'clear' if move
+        spaces = " " * n
+        result = <<-MESSAGE
   #{line_break}
 < #{message} >
   #{line_break}
 
-#{template}
-      MESSAGE
-      if colour == :rainbow
-        result.each_char.each_with_index do |x, i|
-          print x.colorize(String.colors[i % String.colors.size])
+#{template.gsub(/^/, "#{spaces}")}
+        MESSAGE
+        if colour == :rainbow
+          result.each_char.each_with_index do |x, i|
+            print x.colorize(String.colors[i % String.colors.size])
+          end
+        else
+          say result.colorize(colour)
         end
-      else
-        say result.colorize(colour)
+        sleep 1 if move
       end
       nil
     end
