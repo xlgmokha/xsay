@@ -43,7 +43,7 @@ module Xsay
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
       move = distance > 1
-      distance.times do |n|
+      distance.downto(0) do |n|
         system 'clear' if move
         spaces = " " * n
         result = <<-MESSAGE
