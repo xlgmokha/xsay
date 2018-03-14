@@ -48,7 +48,7 @@ module Xsay
         spaces = " " * n
         result = <<-MESSAGE
   #{line_break}
-< #{message} >
+< #{n.even? ? message : ' ' * message.length} >
   #{line_break}
 
 #{template.gsub(/^/, "#{spaces}")}
