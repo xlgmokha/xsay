@@ -23,7 +23,7 @@ module Xsay
 
     def each_frame
       frames = distance.downto(0).to_a + 0.upto(distance).to_a
-      frames.each { |x| yield x }
+      frames.uniq.each { |x| yield x }
     end
 
     private
