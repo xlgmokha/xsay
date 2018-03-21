@@ -15,13 +15,17 @@ module Xsay
     def render(message, template)
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
-      distance.downto(0) do |frame|
-        draw(message, template, line_break, frame)
-      end
-      0.upto(distance) do |frame|
+      each_frame do |frame|
         draw(message, template, line_break, frame)
       end
       nil
+    end
+
+    def each_frame
+      frames = distance.downto(0).to_a + 0.upto(distance).to_a
+      frames.each do |frame|
+        yield frame
+      end
     end
 
     private
