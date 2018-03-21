@@ -6,7 +6,7 @@ module Xsay
   class CLI < Thor
     ANIMALS=Dir[File.expand_path("xsay/templates/*.template", File.dirname(__FILE__))]
     class_option :colour, default: :default, required: false
-    class_option :distance, default: 1, required: false, type: :numeric
+    class_option :distance, default: 0, required: false, type: :numeric
     class_option :speed, default: 1, required: false, type: :numeric
 
     ANIMALS.each do |filename|
@@ -42,7 +42,7 @@ module Xsay
     )
       message = message.join(' ') if message.respond_to?(:join)
       line_break = "-" * message.length
-      move = distance > 1
+      move = distance > 0
       distance.downto(0) do |n|
         system 'clear' if move
         spaces = " " * n
