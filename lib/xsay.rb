@@ -1,6 +1,7 @@
-require "xsay/version"
 require "thor"
 require "colorize"
+require "xsay/render"
+require "xsay/version"
 
 module Xsay
   class CLI < Thor
@@ -14,7 +15,7 @@ module Xsay
 
       desc "#{animal} <message>", "xsay #{animal} hello"
       define_method animal do |*args|
-        render(args, IO.read(filename))
+        renderer.render(args, IO.read(filename))
       end
     end
 
@@ -28,41 +29,17 @@ module Xsay
     desc "random <message>", "xsay random hello"
     def random(*args)
       random_colour = (String.colors + [:rainbow]).sample
-      render(args, IO.read(ANIMALS.shuffle.sample), colour: random_colour)
+      renderer.render(args, IO.read(ANIMALS.shuffle.sample), colour: random_colour)
     end
 
     private
 
-    def render(
-      message,
-      template,
-      colour: options[:colour].to_sym,
-      distance: options[:distance],
-      speed: options[:speed]
-    )
-      message = message.join(' ') if message.respond_to?(:join)
-      line_break = "-" * message.length
-      move = distance > 0
-      distance.downto(0) do |n|
-        system 'clear' if move
-        spaces = " " * n
-        result = <<-MESSAGE
-  #{line_break}
-< #{n.even? ? message : ' ' * message.length} >
-  #{line_break}
-
-#{template.gsub(/^/, "#{spaces}")}
-        MESSAGE
-        if colour == :rainbow
-          result.each_char.each_with_index do |x, i|
-            print x.colorize(String.colors[i % String.colors.size])
-          end
-        else
-          say result.colorize(colour)
-        end
-        sleep speed if move
-      end
-      nil
+    def renderer
+      Render.new(
+        colour: options[:colour].to_sym,
+        distance: options[:distance],
+        speed: options[:speed]
+      )
     end
   end
 end
