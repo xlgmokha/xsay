@@ -29,14 +29,14 @@ module Xsay
     desc "random <message>", "xsay random hello"
     def random(*args)
       random_colour = (String.colors + [:rainbow]).sample
-      renderer.render(args, IO.read(ANIMALS.shuffle.sample), colour: random_colour)
+      renderer(random_colour).render(args, IO.read(ANIMALS.shuffle.sample))
     end
 
     private
 
-    def renderer
+    def renderer(colour = options[:colour].to_sym)
       Render.new(
-        colour: options[:colour].to_sym,
+        colour: colour,
         distance: options[:distance],
         speed: options[:speed]
       )
